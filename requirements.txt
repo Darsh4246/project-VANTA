@@ -1,0 +1,5 @@
+langchain>=1.0,<2
+langchain-ollama>=1.0,<2
+psutil>=6.0
+python-dotenv>=1.0
+rich>=14.0
