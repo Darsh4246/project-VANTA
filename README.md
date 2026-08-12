@@ -25,9 +25,9 @@ To start VANTA, make sure you have Python 3.12+ and Ollama installed.
    *(Or the model specified in your environment config).*
 
 2. **Launch the Console:**
-   - On **Windows**, double-click the **`run_agent.bat`** script in the project root, or execute:
+   - On **Windows**, execute the command script in the project root:
      ```cmd
-     run_agent.bat
+     vanta.cmd
      ```
    - Alternatively, activate the virtual environment and run manually:
      ```bash
@@ -35,6 +35,30 @@ To start VANTA, make sure you have Python 3.12+ and Ollama installed.
      set PYTHONPATH=%CD%
      python vanta/main.py
      ```
+
+### 🌐 Accessing VANTA Globally (Optional)
+
+To launch VANTA from any directory on your computer, add the project's root directory path to your Windows environment `Path` variable:
+
+* **Method A: Permanently via PowerShell (Recommended)**
+  Open a PowerShell terminal and run (replace `C:\path\to\project` with the actual folder path where the project is located):
+  ```powershell
+  $VantaPath = "C:\path\to\project" # Replace with your actual project root path
+  [System.Environment]::SetEnvironmentVariable("Path", [System.Environment]::GetEnvironmentVariable("Path", "User") + ";$VantaPath", "User")
+  ```
+  *(Restart your terminal window after running this command).*
+
+* **Method B: Permanently via GUI**
+  1. Press `Win + R`, type `sysdm.cpl`, and press **Enter** (opens *System Properties*).
+  2. Navigate to **Advanced** tab > **Environment Variables...**.
+  3. Under **User variables** (top list), select `Path` and click **Edit...**.
+  4. Click **New** and add the absolute path to the project root folder (e.g., `C:\path\to\project`).
+  5. Click **OK** on all dialogs to save, then restart your terminal.
+
+Once configured, you can simply run the console from any directory by typing:
+```cmd
+vanta
+```
 
 ---
 
