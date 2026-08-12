@@ -4,6 +4,7 @@ from vanta.tools.cpu import get_cpu_data
 from vanta.tools.memory import get_memory_data
 from vanta.tools.storage import get_storage_data
 from vanta.tools.network import get_network_data
+from vanta.tools.devices import get_device_driver_data
 from vanta.diagnostics.health import calculate_health_scores
 from vanta.database.history import init_db, log_session, get_history
 from vanta.diagnostics.engine import run_rule_based_diagnostics
@@ -79,3 +80,9 @@ def test_rule_based_diagnostics_report():
     assert report.overall_health_score >= 0
     assert isinstance(report.findings, list)
     assert report.categories_scores
+
+def test_device_driver_data_collection():
+    data = get_device_driver_data()
+    assert "devices" in data or "error" in data
+    assert "drivers" in data
+    assert "platform" in data

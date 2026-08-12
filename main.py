@@ -44,6 +44,7 @@ from vanta.tools.services import service_diagnostics
 from vanta.tools.startup import startup_diagnostics
 from vanta.tools.software import software_diagnostics
 from vanta.tools.logs import log_diagnostics
+from vanta.tools.devices import device_driver_diagnostics
 
 def confirm_callback(action_name: str, risk: str, reason: str) -> bool:
     """CLI confirmation prompt for modifying actions."""
@@ -119,6 +120,7 @@ def print_help():
   [bold {theme['secondary']}]status[/bold {theme['secondary']}]        Show agent configurations and environment state
   [bold {theme['secondary']}]scan[/bold {theme['secondary']}]          Execute a comprehensive system scan
   [bold {theme['secondary']}]hardware[/bold {theme['secondary']}]      Display hardware info (motherboard, GPU, sensors)
+  [bold {theme['secondary']}]devices[/bold {theme['secondary']}]       List system hardware devices and driver states
   [bold {theme['secondary']}]cpu[/bold {theme['secondary']}]           Print detailed CPU statistics
   [bold {theme['secondary']}]memory[/bold {theme['secondary']}]        Print RAM and pagefile metrics
   [bold {theme['secondary']}]processes[/bold {theme['secondary']}]     Show high-usage processes
@@ -359,6 +361,21 @@ def main():
             
         if command in ("hardware", "/hardware"):
             console.print(Panel(hardware_diagnostics.invoke({}), title="Hardware Diagnostics", border_style=theme['secondary']))
+            continue
+            
+        if command == "devices" or command.startswith("devices ") or command in ("/devices", "/devices "):
+            parts = user_input.split(maxsplit=1)
+            if len(parts) == 1:
+                res = device_driver_diagnostics.invoke({})
+            else:
+                arg = parts[1].strip()
+                if arg.lower() in ("problematic", "error", "degraded"):
+                    res = device_driver_diagnostics.invoke({"show_problematic_only": True})
+                elif arg.lower() in ("biometric", "usb", "net", "display", "system", "bluetooth", "media", "keyboard", "mouse"):
+                    res = device_driver_diagnostics.invoke({"filter_class": arg})
+                else:
+                    res = device_driver_diagnostics.invoke({"query": arg})
+            console.print(Panel(res, title="Device & Driver Diagnostics", border_style=theme['secondary']))
             continue
             
         if command in ("history", "/history"):

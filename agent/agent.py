@@ -18,6 +18,7 @@ from vanta.tools.services import service_diagnostics
 from vanta.tools.startup import startup_diagnostics
 from vanta.tools.software import software_diagnostics
 from vanta.tools.logs import log_diagnostics
+from vanta.tools.devices import device_driver_diagnostics
 
 # Import action executors
 from vanta.actions.registry import execute_action, ACTION_REGISTRY
@@ -99,6 +100,7 @@ ALL_TOOLS = [
     startup_diagnostics,
     software_diagnostics,
     log_diagnostics,
+    device_driver_diagnostics,
     restart_service_tool,
     clear_temp_files_tool,
     disable_startup_app_tool,

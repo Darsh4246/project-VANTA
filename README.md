@@ -1,8 +1,84 @@
-# `vanta` Python Package
+```text
+██╗   ██╗ █████╗ ███╗   ██╗████████╗ █████╗ 
+██║   ██║██╔══██╗████╗  ██║╚══██╔══╝██╔══██╗
+██║   ██║███████║██╔██╗ ██║   ██║   ███████║
+╚██╗ ██╔╝██╔══██║██║╚██╗██║   ██║   ██╔══██║
+ ╚████╔╝ ██║  ██║██║ ╚████║   ██║   ██║  ██║
+  ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝
 
-This directory contains the core implementation of **VANTA** (Virtual Autonomous Network & Technical Analyst). 
+  VIRTUAL AUTONOMOUS NETWORK & TECHNICAL ANALYST
+```
 
-## Directory Structure
+Welcome to **VANTA** (Virtual Autonomous Network & Technical Analyst). VANTA is a state-of-the-art AI systems technician and diagnostic console designed to inspect your hardware, operating system, running processes, drivers, and network connectivity using plain English and automated scans.
+
+---
+
+## 🚀 How to Run VANTA
+
+To start VANTA, make sure you have Python 3.12+ and Ollama installed.
+
+1. **Start Ollama** (required for Natural Language Mode):
+   Ensure your local Ollama server is running and you have downloaded the required model:
+   ```bash
+   ollama run gemma4:31b-cloud
+   ```
+   *(Or the model specified in your environment config).*
+
+2. **Launch the Console:**
+   - On **Windows**, double-click the **`run_agent.bat`** script in the project root, or execute:
+     ```cmd
+     run_agent.bat
+     ```
+   - Alternatively, activate the virtual environment and run manually:
+     ```bash
+     .venv\Scripts\activate
+     set PYTHONPATH=%CD%
+     python vanta/main.py
+     ```
+
+---
+
+## 🛠 How to Use VANTA
+
+Once the terminal interface loads, you can interact with VANTA in two ways:
+
+### 1. Ask Questions in Plain English (Natural Language Mode)
+Just type what you'd like to check or fix, and the AI agent will automatically run the appropriate diagnostics tools:
+* *“Why is my computer running so slow?”*
+* *“Check if my fingerprint reader is installed and working.”*
+* *“What applications are taking up all my RAM?”*
+* *“Clean up temporary files on my hard drive.”*
+* *“Are there any stopped automatic services?”*
+
+### 2. Run Direct CLI Shortcuts
+You can type direct commands for immediate diagnostics:
+* `scan` — Execute a comprehensive, multi-point system health scan.
+* `status` — Show system engine status, model info, and safe-mode state.
+* `devices` — List system PnP devices, drivers, and biometric sensors.
+  * `devices biometric` — Specifically lists biometric hardware (like fingerprint readers).
+  * `devices problematic` — Shows only devices reporting warning/error statuses.
+  * `devices <query>` — Search for a specific device or driver (e.g., `devices goodix`).
+* `hardware` — Display motherboard, GPU, and system temperature information.
+* `cpu` — Print live utilization metrics and per-core usage.
+* `memory` — Show RAM utilization and pagefile details.
+* `processes` — Display processes consuming the most resources.
+* `storage` — Inspect hard drive partitions and capacity.
+* `network` — Test gateway connections, DNS latency, and internet reachability.
+* `services` — Check automatic Windows services that are currently stopped.
+* `startup` — List programs that run automatically on system boot.
+* `software` — Search and inventory installed applications.
+* `logs` — Summarize critical errors and warnings from Windows Event Logs.
+* `history` — View audit trails of past diagnostic queries and recommendations.
+* `settings` — Change console color themes (e.g. `Solar Flare`, `Amber Glow`).
+* `clear` — Clear current conversation context memory.
+* `about` — Display project details and credits.
+* `exit` — Suspends and closes the diagnostics session.
+
+---
+
+## 💻 Developer's Notes
+
+### Project Directory Structure
 
 ```text
 vanta/
@@ -18,6 +94,7 @@ vanta/
 ├── tools/                  # Read-only systems diagnostics collectors
 │   ├── system.py           # OS, platform, and basic environment specs
 │   ├── hardware.py         # Motherboard, GPU, battery, and sensors
+│   ├── devices.py          # Plug & Play hardware devices & drivers list
 │   ├── cpu.py              # Per-core utilization & frequency analytics
 │   ├── memory.py           # RAM pagefile & allocation limits
 │   ├── processes.py        # High-usage active processes
@@ -49,54 +126,12 @@ vanta/
 └── tests/                  # Automated pytest testing suite
 ```
 
-## Key Components
-
-### 1. Main Entrypoint ([main.py](file:///e:/Darsh/Langchain_agent/vanta/main.py))
-- Coordinates the main CLI loop, handling user commands (`scan`, `status`, `exit`, etc.) and processing natural language inputs.
-- Invokes the LangChain agent for LLM-driven query resolution or uses the rules-engine fallback when Ollama is offline.
-- Renders an interactive, theme-based UI using `rich`.
-
-### 2. Configuration ([config.py](file:///e:/Darsh/Langchain_agent/vanta/config.py))
-- Parses environment variables from the root `.env` file.
-- Exposes:
-  - `VANTA_MODEL`: LLM identifier (defaults to `gemma4:31b-cloud`).
-  - `OLLAMA_BASE_URL`: Ollama local instance URL.
-  - `VANTA_SAFE_MODE`: Boolean determining if OS-modifying commands are permitted.
-  - `DB_PATH`: SQLite memory database path.
-
-### 3. Agent Subpackage ([agent/](file:///e:/Darsh/Langchain_agent/vanta/agent/))
-- Builds the `ChatOllama` agent and binds diagnostic/repair tools.
-- Implements `ConversationMemory` to track conversational context with sliding limits to prevent context overflow.
-
-### 4. Diagnostics & Tools ([tools/](file:///e:/Darsh/Langchain_agent/vanta/tools/) & [diagnostics/](file:///e:/Darsh/Langchain_agent/vanta/diagnostics/))
-- Diagnostic plugins in `tools/` gather system telemetry using native Python/Windows APIs.
-- The `diagnostics/engine.py` runs checks sequentially, producing a structured scan report.
-- The `health.py` module uses heuristic math to calculate a health score from 0-100 based on warnings.
-
-### 5. Repair Actions ([actions/](file:///e:/Darsh/Langchain_agent/vanta/actions/))
-- Safe, non-arbitrary repair routines that require explicit user verification when Safe Mode is disabled.
-- Actions list:
-  - `restart_service`: Restarts a stopped automatic Windows service.
-  - `clear_temp_files`: Wipes user/system temp directories.
-  - `disable_startup_app`: Disables application startup items.
-  - `flush_dns`: Resets the Windows DNS resolver cache.
-
-### 6. Persistent Database ([database/](file:///e:/Darsh/Langchain_agent/vanta/database/))
-- Uses a local SQLite file to store the session metadata, scan findings, applied recommendations, and user repair choices.
-
-### 7. Rich User Interface ([ui/](file:///e:/Darsh/Langchain_agent/vanta/ui/))
-- Styled panels, animated CLI entry, and theme loader supporting custom configurations such as `Amber Glow` and `Solar Flare`.
-
----
-
-## Developer Guide
-
 ### Adding a Diagnostic Tool
-1. Create a function wrapped with the LangChain `@tool` decorator under `vanta/tools/`.
-2. Define a clear docstring describing what system info the tool retrieves so the LLM knows when to call it.
-3. Import the tool function inside [agent.py](file:///e:/Darsh/Langchain_agent/vanta/agent/agent.py) and add it to the `ALL_TOOLS` list.
+1. Create a tool method wrapped with the LangChain `@tool` decorator under `vanta/tools/`.
+2. Define a descriptive docstring explaining what telemetry is retrieved. The AI agent relies on this docstring to understand when to invoke it.
+3. Import the tool function inside [agent.py](file:///e:/Darsh/Langchain_agent/vanta/agent/agent.py) and append it to the `ALL_TOOLS` registry list.
 
-### Registering a New Action
-1. Write the target repair method inside [executor.py](file:///e:/Darsh/Langchain_agent/vanta/actions/executor.py).
-2. Register the action name, risks (`LOW`, `MEDIUM`, `HIGH`), and the execution callback inside [registry.py](file:///e:/Darsh/Langchain_agent/vanta/actions/registry.py).
-3. Bind the action tool using a validator wrapper in [agent.py](file:///e:/Darsh/Langchain_agent/vanta/agent/agent.py) to handle user confirmations and `VANTA_SAFE_MODE` checks.
+### Registering a Repair Action
+1. Write the repair logic in [executor.py](file:///e:/Darsh/Langchain_agent/vanta/actions/executor.py).
+2. Register the command name, danger classification (`LOW`, `MEDIUM`, `HIGH`), and the execution callback inside [registry.py](file:///e:/Darsh/Langchain_agent/vanta/actions/registry.py).
+3. Bind the action tool using a validator wrapper in [agent.py](file:///e:/Darsh/Langchain_agent/vanta/agent/agent.py) to manage user approval triggers and `VANTA_SAFE_MODE` protection flags.
