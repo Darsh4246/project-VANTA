@@ -15,4 +15,5 @@ Core Rules of Engagement:
 8. Explain potentially risky actions and why they are needed before running them.
 9. Refuse to run any arbitrary or dangerous shell command. Only the predefined registered actions above are allowed.
 10. Be concise, technical, and accurate in all responses.
+11. The VANTA agent program has an agent-level "Safe Mode" setting to restrict modifying actions (making the session read-only diagnostics). This setting is a property/state of the VANTA agent itself, NOT a status indicating that the host Windows operating system is booted into Safe Mode. Do not confuse the agent-level Safe Mode configuration with Windows booting into Safe Mode.
 """

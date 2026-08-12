@@ -35,7 +35,7 @@ def set_confirm_callback(callback):
 def restart_service_tool(service_name: str) -> str:
     """Request to restart a stopped or failed Windows service. Requires admin rights and user confirmation."""
     if VANTA_SAFE_MODE:
-        return "Action Prohibited: Service modifications are disabled in Safe Mode."
+        return "Action Prohibited: Service modifications are disabled because VANTA's agent-level Safe Mode is enabled (this is a safety setting of the agent, not the host Windows OS boot state)."
         
     reason = f"Request to restart Windows service '{service_name}'."
     if _confirm_callback:
@@ -49,7 +49,7 @@ def restart_service_tool(service_name: str) -> str:
 def clear_temp_files_tool() -> str:
     """Request to delete temporary cache and log files to free storage space. Requires user confirmation."""
     if VANTA_SAFE_MODE:
-        return "Action Prohibited: File deletions are disabled in Safe Mode."
+        return "Action Prohibited: File deletions are disabled because VANTA's agent-level Safe Mode is enabled (this is a safety setting of the agent, not the host Windows OS boot state)."
         
     reason = "Request to delete temporary caches and log files from system temp directories."
     if _confirm_callback:
@@ -63,7 +63,7 @@ def clear_temp_files_tool() -> str:
 def disable_startup_app_tool(app_name: str) -> str:
     """Request to disable an application from starting automatically on boot. Requires user confirmation."""
     if VANTA_SAFE_MODE:
-        return "Action Prohibited: Registry modifications are disabled in Safe Mode."
+        return "Action Prohibited: Registry modifications are disabled because VANTA's agent-level Safe Mode is enabled (this is a safety setting of the agent, not the host Windows OS boot state)."
         
     reason = f"Request to remove '{app_name}' from the user startup configuration."
     if _confirm_callback:
@@ -77,7 +77,7 @@ def disable_startup_app_tool(app_name: str) -> str:
 def flush_dns_tool() -> str:
     """Request to flush local DNS cache. Requires user confirmation."""
     if VANTA_SAFE_MODE:
-        return "Action Prohibited: Network configuration changes are disabled in Safe Mode."
+        return "Action Prohibited: Network configuration changes are disabled because VANTA's agent-level Safe Mode is enabled (this is a safety setting of the agent, not the host Windows OS boot state)."
         
     reason = "Request to flush DNS resolver cache."
     if _confirm_callback:

@@ -418,7 +418,12 @@ def main():
         memory.add_user_message(user_input)
         
         # Build prompt message chain
-        messages = [SystemMessage(content=SYSTEM_PROMPT)]
+        safe_mode_status = "ENABLED" if VANTA_SAFE_MODE else "DISABLED"
+        agent_status_prompt = (
+            f"\n\nCURRENT VANTA AGENT CONFIGURATION:\n"
+            f"- Agent Safe Mode Setting: {safe_mode_status} (This is a safety configuration of the VANTA agent application restricting repairs to read-only diagnostics. It does NOT mean the Windows operating system is booted into Safe Mode.)"
+        )
+        messages = [SystemMessage(content=SYSTEM_PROMPT + agent_status_prompt)]
         for m in memory.get_messages():
             if m["role"] == "user":
                 messages.append(HumanMessage(content=m["content"]))
